@@ -8,6 +8,8 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 app = FastAPI()
 
+class Message(BaseModel):
+    message: str
 
 @app.get("/")
 def home():
@@ -18,7 +20,9 @@ def chat(msg: Message):
 
     data = {
         "model": "llama3-8b-8192",
-        "messages": [{"role":"user","content": msg.message}]
+        "messages": [
+            {"role": "user", "content": msg.message}
+        ]
     }
 
     headers = {
@@ -35,7 +39,6 @@ def chat(msg: Message):
     print(res.text)
 
     reply = res.json()["choices"][0]["message"]["content"]
-
     return {"reply": reply}
 
 
