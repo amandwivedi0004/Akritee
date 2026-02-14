@@ -100,20 +100,7 @@ Akritee:
 
     response = requests.post(
         "http://localhost:11434/api/generate",
-        json={
-            "model": "llama3:8b",
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.65,
-                "top_p": 0.9,
-                "repeat_penalty": 1.3,
-                "presence_penalty": 1.0,
-                "num_predict": 55,
-                "num_ctx": 2048,
-                "seed": 42
-            }
-        }
+        json=data
     )
 
     data = response.json()
