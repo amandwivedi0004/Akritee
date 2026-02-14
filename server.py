@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
+from fastapi.responses import FileResponse
+
 
 app = FastAPI()
 @app.get("/")
 def home():
-    return {"status":"Akritee API running"}
+    return FileResponse("index.html")
+
 
 
 # Allow frontend requests
