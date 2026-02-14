@@ -39,8 +39,8 @@ def chat(msg: Message):
     print(res.text)
 
     reply = res.json()["choices"][0]["message"]["content"]
-    return {"reply": reply}
 
+    return {"reply": reply}
 
 
 # Allow frontend requests
