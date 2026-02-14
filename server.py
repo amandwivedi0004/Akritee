@@ -3,12 +3,40 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 from fastapi.responses import FileResponse
-
+import os
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 app = FastAPI()
+
+
 @app.get("/")
 def home():
     return FileResponse("index.html")
+
+@app.post("/chat")
+def chat(msg: Message):
+
+    data = {
+        "model": "llama3-8b-8192",
+        "messages": [{"role":"user","content": msg.message}]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    res = requests.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        headers=headers,
+        json=data
+    )
+
+    print(res.text)
+
+    reply = res.json()["choices"][0]["message"]["content"]
+
+    return {"reply": reply}
 
 
 
