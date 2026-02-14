@@ -4,6 +4,10 @@ from pydantic import BaseModel
 import requests
 
 app = FastAPI()
+@app.get("/")
+def home():
+    return {"status":"Akritee API running"}
+
 
 # Allow frontend requests
 app.add_middleware(
