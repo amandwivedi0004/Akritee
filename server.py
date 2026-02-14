@@ -1,3 +1,4 @@
+from click import prompt
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -98,17 +99,25 @@ User: {msg.message}
 Akritee:
 """
 
-    response = requests.post(
-        "http://localhost:11434/api/generate",
-        json=data
-    )
 
-    data = response.json()
-    reply = data.get("response","")
+data = {
+    "model": "llama-3.1-8b-instant",
+    "messages": [
+        {"role": "user", "content": prompt}
+    ]
+}
 
-    # ⭐ UTF-8 FIX (emoji + broken characters)
-    reply = reply.encode("utf-8","ignore").decode("utf-8")
 
-    conversation_history.append({"role":"girl","text":reply})
+headers = {
+    "Authorization": f"Bearer {GROQ_API_KEY}",
+    "Content-Type": "application/json"
+}
 
-    return {"reply": reply}
+response = requests.post(
+    "https://api.groq.com/openai/v1/chat/completions",
+    headers=headers,
+    json=data
+)
+
+result = response.json()
+reply = result["choices"][0]["message"]["content"]
